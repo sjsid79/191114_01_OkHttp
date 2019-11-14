@@ -1,10 +1,13 @@
 package com.tjoeun.a191114_01_okhttp
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import com.tjoeun.a191114_01_okhttp.utils.ServerUtil
 import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.android.synthetic.main.activity_login.signUpBtn
+import kotlinx.android.synthetic.main.activity_sign_up.*
 import org.json.JSONObject
 
 class LoginActivity : BaseActivity() {
@@ -20,6 +23,11 @@ class LoginActivity : BaseActivity() {
     }
 
     override fun setupEvents() {
+        signUpBtn.setOnClickListener {
+            var intent = Intent(mContext, SignUpActivity::class.java)
+            startActivity(intent)
+        }
+
         loginBtn.setOnClickListener {
             var inputId = userIdEdt.text.toString()
             var inputPw = userPwEdt.text.toString()

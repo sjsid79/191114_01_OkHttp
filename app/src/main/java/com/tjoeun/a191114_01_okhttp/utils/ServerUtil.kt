@@ -27,7 +27,7 @@ class ServerUtil {
 
             // POST메소드에서 요구하는 파라미터를 FormBody에 담아줌
             var formBody = FormBody.Builder()
-                .add("lngin_id", loginId)
+                .add("login_id", loginId)
                 .add("password", loginPw)
                 .build()
 
@@ -54,7 +54,44 @@ class ServerUtil {
 
         }
 
+        // ctrl + alt + L -> 자동 들여쓰기
+        fun putRequestSignUp(context: Context, loginId:String, loginPw:String, name:String, phone:String, handler:JsonResponseHandler?){
+            // 우리가 만드는 앱을 클라이언트 역할로 동작하게 해주는 클래스
+            var client = OkHttpClient()
 
+            // 기능 주소와 서버 주소를 조합해서 실제 요청 주소 완성.
+            var url = "${BASE_URL}/auth"
+
+            // POST메소드에서 요구하는 파라미터를 FormBody에 담아줌
+            var formBody = FormBody.Builder()
+                .add("login_id", loginId)
+                .add("password", loginPw)
+                .add("name", name)
+                .add("phone", phone)
+                .build()
+
+            // 실제로 날아갈 요청(request)을 생성
+            var request = Request.Builder()
+                .url(url)
+                .put(formBody)
+                .build()
+
+            client.newCall(request).enqueue(object : Callback{
+                // 실패했을경우
+                override fun onFailure(call: Call, e: IOException) {
+                    Log.e("회원가입에러", e.localizedMessage)
+                }
+
+                // 성공했을경우
+                override fun onResponse(call: Call, response: Response) {
+                    var body = response.body!!.string()
+                    var json:JSONObject = JSONObject(body)
+                    handler?.onResponse(json)
+                }
+
+            })
+
+        }
     }
 
 
